@@ -142,8 +142,8 @@ job-recommendation-system/
 
 ## 👨‍💻 Author
 
-Made as part of MCA Final Year Project  
-**[Your Name]** — [Your College Name]
+Made For Learning Purpose (ML,Python)
+**[Author - Shrajan v]**
 
 ---
 
