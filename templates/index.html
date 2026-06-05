@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}JobReco — AI-Powered Job Recommendations{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🤖 Powered by TF-IDF + Cosine Similarity ML</div>
+    <h1>Find Your <span class="highlight">Perfect Job</span><br/>With AI Recommendations</h1>
+    <p class="hero-sub">Real job data. Smart matching. Instant results.</p>
+    <form class="hero-form" action="/recommend" method="POST">
+      <input type="text" name="skills" placeholder="Enter your skills — e.g. Python, Machine Learning, SQL..." required />
+      <select name="experience">
+        <option value="">Experience</option>
+        <option value="0-2 years">0–2 years</option>
+        <option value="2-4 years">2–4 years</option>
+        <option value="3-5 years">3–5 years</option>
+        <option value="5+ years">5+ years</option>
+      </select>
+      <button type="submit" class="btn-primary">Get Recommendations →</button>
+    </form>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><span class="stat-num">{{ stats.total_jobs }}+</span><span class="stat-label">Real Jobs</span></div>
+    <div class="stat-card"><span class="stat-num">{{ stats.categories }}</span><span class="stat-label">Categories</span></div>
+    <div class="stat-card"><span class="stat-num">{{ stats.locations }}</span><span class="stat-label">Locations</span></div>
+    <div class="stat-card"><span class="stat-num">AI</span><span class="stat-label">Powered</span></div>
+  </div>
+</section>
+
+<!-- Trending Skills -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">🔥 Trending Skills in the Market</h2>
+    <p class="section-sub">Most in-demand skills based on real job data</p>
+    <div class="trending-wrap">
+      {% for t in trending %}
+      <a href="/recommend" onclick="document.querySelector('[name=skills]') && (document.querySelector('[name=skills]').value='{{t.skill}}')" class="trending-tag">
+        {{ t.skill }} <span class="trending-count">{{ t.count }} jobs</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Browse by Category</h2>
+    <div class="category-grid">
+      {% set icons = {"Software Development":"💻","Data Science & AI":"🧠","Web Development":"🌐","DevOps & Cloud":"☁️","Mobile Development":"📱","Cybersecurity":"🔒","Design":"🎨","Database":"🗄","Hardware & IoT":"🔧","Business & Management":"📊","Networking":"📶","Technology":"⚙️","Finance & Banking":"🏦","Healthcare":"🏥","Education":"📚","Engineering":"🔩","Manufacturing":"🏭","Media & Marketing":"📣","Retail & E-commerce":"🛒","Operations":"📦","Government & Public Sector":"🏛️"} %}
+      {% for cat in categories %}
+      <a href="/jobs?category={{ cat }}" class="cat-card">
+        <span class="cat-icon">{{ icons.get(cat, "💼") }}</span>
+        <span class="cat-name">{{ cat }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Top Rated Jobs -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">⭐ Top Rated Jobs</h2>
+      <a href="/jobs" class="link-more">View all →</a>
+    </div>
+    <div class="jobs-grid">
+      {% for job in featured_jobs %}
+      <a href="/job/{{ job.id }}" class="job-card">
+        <div class="job-card-top">
+          <div class="job-avatar">{{ job.company[0] if job.company else 'J' }}</div>
+          <div>
+            <h3 class="job-title">{{ job.title[:45] }}{% if job.title|length > 45 %}...{% endif %}</h3>
+            <p class="job-company">{{ job.company[:35] }}</p>
+          </div>
+          {% if job.rating and job.rating > 0 %}
+          <div class="rating-badge">⭐ {{ job.rating }}</div>
+          {% endif %}
+        </div>
+        <div class="job-meta">
+          <span class="tag">📍 {{ job.location[:20] }}</span>
+          <span class="tag tag-green">{{ job.experience }}</span>
+        </div>
+        {% if job.salary %}<p class="job-salary">💰 {{ job.salary }}</p>{% endif %}
+        <p class="job-desc">{{ job.description[:110] }}...</p>
+        <div class="job-skills">
+          {% for skill in job.skills.split()[:5] %}<span class="skill-tag">{{ skill }}</span>{% endfor %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">How the AI Works</h2>
+    <div class="steps-grid">
+      <div class="step-card"><div class="step-num">01</div><h3>Enter Skills</h3><p>Type your skills and experience in plain language.</p></div>
+      <div class="step-card"><div class="step-num">02</div><h3>TF-IDF Vectorization</h3><p>Skills converted to numeric vectors. Important words get higher weights.</p></div>
+      <div class="step-card"><div class="step-num">03</div><h3>Cosine Similarity</h3><p>Your vector compared against 597 real job vectors for similarity score.</p></div>
+      <div class="step-card"><div class="step-num">04</div><h3>Ranked Results</h3><p>Jobs sorted by match % — most relevant at the top.</p></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

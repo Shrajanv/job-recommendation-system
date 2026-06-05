@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}My Profile — JobReco{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <h1>👤 My Profile</h1>
+    <p>Save your profile to get better recommendations.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width: 680px;">
+
+    {% if message == "success" %}
+    <div class="alert alert-success">✅ Profile saved! Your skills are now linked to recommendations.</div>
+    {% elif message %}
+    <div class="alert alert-error">❌ {{ message }}</div>
+    {% endif %}
+
+    <div class="form-card">
+      <h2>Profile Details</h2>
+      <form method="POST" action="/profile">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" name="name" required value="{{ user.name if user else '' }}" placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" name="email" required value="{{ user.email if user else '' }}" placeholder="your@email.com" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Your Skills *</label>
+          <textarea name="skills" rows="3" placeholder="python, machine learning, flask, sql, git..." required>{{ user.skills if user else '' }}</textarea>
+          <small>Separate with commas. These are used for AI matching.</small>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Experience Level</label>
+            <select name="experience">
+              <option value="">Select</option>
+              {% for exp in ["Fresher / 0-1 year","1-3 years","2-4 years","3-5 years","5+ years"] %}
+              <option value="{{ exp }}" {% if user and user.experience == exp %}selected{% endif %}>{{ exp }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Location</label>
+            <input type="text" name="location" value="{{ user.preferred_location if user else '' }}" placeholder="Bangalore, Remote, etc." />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Education</label>
+          <input type="text" name="education" value="{{ user.education if user else '' }}" placeholder="B.E. Computer Science, SJEC Mangalore" />
+        </div>
+
+        <button type="submit" class="btn-primary btn-full">Save Profile</button>
+      </form>
+    </div>
+
+    {% if user %}
+    <div class="profile-actions">
+      <a href="/recommend" class="btn-primary">✨ Get My Recommendations →</a>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

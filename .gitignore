@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# ML Model (auto-generated on first run)
+model/tfidf_model.pkl
+
+# Database (auto-generated on first run)
+database/jobs.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temp
+*.log
+*.tmp

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Browse Jobs — JobReco{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <div class="container">
+    <h1>🔎 Browse All Jobs</h1>
+    <p>{{ jobs|length }} job{{ 's' if jobs|length != 1 else '' }} found</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Search Bar -->
+    <form method="GET" action="/jobs" class="search-bar">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search by title, skill, or keyword..." />
+      <input type="text" name="location" value="{{ location }}" placeholder="Location..." style="max-width:160px" />
+      <select name="category">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+        <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn-primary">Search</button>
+      {% if query or location or selected_category %}
+      <a href="/jobs" class="btn-ghost">Clear</a>
+      {% endif %}
+    </form>
+
+    <!-- Jobs Grid -->
+    {% if jobs %}
+    <div class="jobs-grid">
+      {% for job in jobs %}
+      <a href="/job/{{ job.id }}" class="job-card">
+        <div class="job-card-top">
+          <div class="job-avatar">{{ job.company[0] }}</div>
+          <div>
+            <h3 class="job-title">{{ job.title }}</h3>
+            <p class="job-company">{{ job.company }}</p>
+          </div>
+        </div>
+        <div class="job-meta">
+          <span class="tag">📍 {{ job.location }}</span>
+          <span class="tag">{{ job.job_type }}</span>
+          <span class="tag tag-green">{{ job.experience }}</span>
+        </div>
+        {% if job.salary %}<p class="job-salary">💰 {{ job.salary }}</p>{% endif %}
+        <p class="job-desc">{{ job.description[:120] }}...</p>
+        <div class="job-skills">
+          {% for skill in job.skills.split()[:5] %}
+          <span class="skill-tag">{{ skill }}</span>
+          {% endfor %}
+        </div>
+        <div class="card-category">{{ job.category }}</div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">😔</div>
+      <h3>No jobs found</h3>
+      <p>Try different keywords or <a href="/jobs">clear filters</a>.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}JobReco — AI Job Recommendations{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">💼</span>
+        <span>Job<strong>Reco</strong></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" class="{% if request.endpoint=='index' %}active{% endif %}">Home</a></li>
+        <li><a href="/jobs" class="{% if request.endpoint=='jobs_list' %}active{% endif %}">Browse Jobs</a></li>
+        <li><a href="/recommend" class="{% if request.endpoint=='recommend' %}active{% endif %}">✨ Get Recommendations</a></li>
+        <li><a href="/profile" class="{% if request.endpoint=='profile' %}active{% endif %}">My Profile</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>JobReco &mdash; Job Recommendation System &bull; ML Mini Project</p>
+      <p class="footer-sub">Built with Python &bull; Flask &bull; Scikit-learn &bull; TF-IDF</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} — JobReco{% endblock %}
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <a href="/jobs" class="back-link">&larr; Back to Jobs</a>
+
+    <div class="detail-layout">
+
+      <!-- Main Job Info -->
+      <div class="detail-main">
+        <div class="detail-header">
+          <div class="job-avatar job-avatar-lg">{{ job.company[0] }}</div>
+          <div>
+            <h1 class="detail-title">{{ job.title }}</h1>
+            <p class="detail-company">{{ job.company }} &bull; {{ job.location }}</p>
+          </div>
+        </div>
+
+        <div class="detail-meta">
+          <span class="tag">{{ job.job_type }}</span>
+          <span class="tag tag-green">{{ job.experience }}</span>
+          {% if job.salary %}<span class="tag tag-blue">💰 {{ job.salary }}</span>{% endif %}
+          <span class="tag">{{ job.category }}</span>
+        </div>
+
+        <div class="detail-section">
+          <h2>Job Description</h2>
+          <p>{{ job.description }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h2>Required Skills</h2>
+          <div class="job-skills job-skills-lg">
+            {% for skill in job.skills.split() %}
+            <span class="skill-tag skill-tag-lg">{{ skill }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="apply-box">
+          <a href="/recommend?q={{ job.skills }}" class="btn-primary">✨ Find Similar Jobs via AI</a>
+          <a href="/jobs" class="btn-ghost">Browse All Jobs</a>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="detail-sidebar">
+        <div class="sidebar-card">
+          <h3>Job Overview</h3>
+          <ul class="overview-list">
+            <li><strong>Location</strong><span>{{ job.location }}</span></li>
+            <li><strong>Type</strong><span>{{ job.job_type }}</span></li>
+            <li><strong>Experience</strong><span>{{ job.experience }}</span></li>
+            {% if job.salary %}<li><strong>Salary</strong><span>{{ job.salary }}</span></li>{% endif %}
+            <li><strong>Category</strong><span>{{ job.category }}</span></li>
+            <li><strong>Posted</strong><span>{{ job.posted_date }}</span></li>
+          </ul>
+        </div>
+
+        {% if similar %}
+        <div class="sidebar-card">
+          <h3>Similar Jobs</h3>
+          {% for s in similar %}
+          <a href="/job/{{ s.id }}" class="similar-job">
+            <div class="similar-job-avatar">{{ s.company[0] }}</div>
+            <div>
+              <p class="similar-title">{{ s.title }}</p>
+              <p class="similar-company">{{ s.company }}</p>
+            </div>
+            <span class="similar-score">{{ s.score }}%</span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock %}
